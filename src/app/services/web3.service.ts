@@ -18,7 +18,7 @@ export class Web3Service {
         this.web3 = new Web3();
 
         this.web3.setProvider(
-            new Web3.providers.WebsocketProvider('https://ropsten.infura.io/v3/c0c8c037208043debd3192efe93ed1d2:8546')
+            new Web3.providers.WebsocketProvider('wss://ropsten.infura.io/ws/v3/c0c8c037208043debd3192efe93ed1d2')
         );
 
         this.sender = '0xf65112fa0998477c990fb71722b067b7892f2160';
