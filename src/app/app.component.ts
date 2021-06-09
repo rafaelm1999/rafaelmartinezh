@@ -5,23 +5,52 @@ import { Web3Service } from './services/web3.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements AfterViewInit {
   title = 'Ejemplo Ethereum';
-  estado = 'Conectando ...';
+  estado = 'No Conectado.';
+  count = 0;
+  resultado = '';
+
+  blockHash = '';
+  blockNumber = '';
+  from = '';
+  transactionHash = '';
+
+  elementos: any = [];
+  cabeceras = ['Transaction Hash', 'Block Number','Valor'];
 
   constructor(public web3s: Web3Service){
-    console.log(web3s.contrato);
-    
   }
+
   ngAfterViewInit(): void {
-    this.subscribeToEvents();
+    this.web3s.connectAccount().then((r)=>{ 
+                                    this.estado = "Conectado.";
+                                    this.subscribeToEvents();
+                                  });
   }
-  ngOnInit(): void {
-    this.web3s.web3.eth.net.isListening()
-      .then(() => this.estado = 'Conectado.')
-      .catch(e => this.estado = 'Error en conexion');
+
+  getCount(): void {
+    this.web3s.contrato.methods.getCount().call().then((response: any) => {
+                                this.count = response;
+                                                       });
   }
-  
+
+  increment(): void {
+    this.web3s.contrato.methods.increment().send({from: this.web3s.accounts[0]})
+                                           .then((response:any) => {
+                                              this.resultado = "Transacción realizada!";
+                                              
+                                              this.blockHash = response.blockHash;
+                                              this.blockNumber = response.blockNumber;
+                                              this.from = response.from;
+                                              this.transactionHash = response.transactionHash;
+                                           })
+                                           .catch((error: any) => {
+                                              console.log(error);
+                                              this.resultado = "Error en la transacción!";
+                                           });
+  }
+
   subscribeToEvents() {
     // Subscribe to pending transactions
     const self = this;
@@ -29,8 +58,15 @@ export class AppComponent implements OnInit, AfterViewInit {
                                               fromBlock: 0
                                             },
                                             (error: any, event: any) => {
-                                              console.log(error);
-                                              console.log(event);
+                                              if (!error){                                                        
+                                                this.elementos.push(
+                                                  { blockHash: event.blockHash,
+                                                    transactionHash: event.transactionHash,
+                                                    blockNumber:event.blockNumber,                                             
+                                                    valor: event.returnValues.newValue
+                                                  }
+                                                );                                                
+                                              }                                              
                                             });
 
   }

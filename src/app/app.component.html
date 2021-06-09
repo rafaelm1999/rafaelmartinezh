@@ -100,7 +100,7 @@
     border: 1px solid #eee;
     background-color: #fafafa;
     height: 40px;
-    width: 200px;
+    width: 80%;
     margin: 0 8px 16px;
     padding: 16px;
     display: flex;
@@ -272,7 +272,6 @@
     width: 1920px;
   }
 
-
   /* Responsive Styles */
   @media screen and (max-width: 767px) {
 
@@ -306,41 +305,60 @@
 
 <!-- Toolbar -->
 <div class="toolbar" role="banner">
-  <img
-    width="40"
-    alt="Angular Logo"
-    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="
-  />
-  <span>Bienvenidos</span>
-    <div class="spacer"></div>
-    
+  <span class="backspace">
+  <svg id="svg8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 365.5 592" width="40"><style>.st0{fill:#d41e1e}.st1{fill:#831d0b}.st2{fill:#e22e28}</style><g id="layer5"><g id="g1627"><path id="path1599" class="st0" d="M0 322.4c64.4 34.2 131.6 70 183.5 97.7l182-97.7c-65.9 97.9-120.8 179.4-182 269.6C122.2 502 54.5 402.7 0 322.4zm7-27l176.7-94.3 174.4 93.6-174.3 94.4L7 295.4zm176.5-124.5L0 267.5 182.7 0l182.8 268.1-182-97.2z"/><path id="path1593" class="st1" d="M183.5 420.1l182-97.7c-65.9 97.9-182 269.6-182 269.6V420.1zm.2-219l174.4 93.6-174.3 94.4-.1-188zm-.2-30.2L182.7 0l182.8 268.1-182-97.2z"/><path id="path1603" class="st1" d="M7 295.4l176.7 14.5 174.4-15.1-174.3 94.4L7 295.4z"/><path id="path1606" class="st2" d="M183.7 309.9l174.4-15.1-174.3 94.4-.1-79.3z"/></g></g></svg>
+  </span>  
+  <span class="backspace"><h2>Estado: {{estado}}</h2></span>
 </div>
 
 <div class="content" role="main">
-
   <!-- Highlight Card -->
   <div class="card highlight-card card-small">
-
-    <span>{{ estado }}</span>
-
+    <h1>Ejemplo DApp</h1>
     <svg id="rocket-smoke" xmlns="http://www.w3.org/2000/svg" width="516.119" height="1083.632" viewBox="0 0 516.119 1083.632">
       <title>Rocket Ship Smoke</title>
       <path id="Path_40" data-name="Path 40" d="M644.6,141S143.02,215.537,147.049,870.207s342.774,201.755,342.774,201.755S404.659,847.213,388.815,762.2c-27.116-145.51-11.551-384.124,271.9-609.1C671.15,139.365,644.6,141,644.6,141Z" transform="translate(-147.025 -140.939)" fill="#f5f5f5"/>
     </svg>
-
   </div>
-
 
   <!-- Links -->
-  <div class="card-container">
-
-
+  <div class="card">
+      <button (click)="getCount()">getCount()</button> <input type="text" value="{{ count }}" style="text-align:right;"/>           
   </div>
+  <div class="card">
+    <button (click)="increment()">increment()</button> &nbsp; &nbsp;{{resultado}}    
+  </div>  
+  <table>
+    <tr>
+      <th>Transaction Hash</th>
+      <th>Block number</th>
+      <th>From</th>  
+    </tr>
+    <tr>
+      <td>{{ this.transactionHash }}</td>
+      <td>{{ this.blockNumber }}</td>
+      <td>{{ this.from }}</td>     
+    </tr>
+  </table>   
 
   <!-- Footer -->
-  <footer>
-
-  </footer>
+  <div class="card-container">
+    
+    <table style="display: block; border: 1px solid; height: 600px; overflow-y: scroll">
+      <thead>
+        <tr>
+          <th *ngFor="let cabecera of cabeceras; let i = index" scope="col">{{cabecera}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let el of elementos; let i = index">         
+          <td>{{el.transactionHash}}</td>
+          <td>{{el.blockNumber}}</td>
+          <td>{{el.valor}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <svg id="clouds" xmlns="http://www.w3.org/2000/svg" width="2611.084" height="485.677" viewBox="0 0 2611.084 485.677">
     <title>Gray Clouds Background</title>
@@ -348,12 +366,3 @@
   </svg>
 
 </div>
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
