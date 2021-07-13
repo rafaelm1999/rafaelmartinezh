@@ -6,18 +6,19 @@ import { Web3Service } from './services/web3.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements AfterViewInit {
-  title = 'Ejemplo Ethereum';
+  cantidad = '';
+  direccion = '';
+  title = 'FUTCO';
   estado = 'No Conectado.';
   count = 0;
   resultado = '';
-
   blockHash = '';
   blockNumber = '';
-  from = '';
+  to = '';
   transactionHash = '';
 
   elementos: any = [];
-  cabeceras = ['Transaction Hash', 'Block Number','Valor'];
+  cabeceras = ['Enviado a','Unidades','Transaction Hash', 'Block Number'];
 
   constructor(public web3s: Web3Service){
   }
@@ -29,41 +30,40 @@ export class AppComponent implements AfterViewInit {
                                   });
   }
 
-  getCount(): void {
-    this.web3s.contrato.methods.getCount().call().then((response: any) => {
+  balanceOf(): void {
+    this.web3s.contrato.methods.balanceOf(this.web3s.accounts[0]).call().then((response: any) => {
                                 this.count = response;
                                                        });
   }
 
-  increment(): void {
-    this.web3s.contrato.methods.increment().send({from: this.web3s.accounts[0]})
+  transfer(): void {
+    this.web3s.contrato.methods.transfer(this.direccion,this.cantidad).send({from: this.web3s.accounts[0]})
                                            .then((response:any) => {
-                                              this.resultado = "Transacción realizada!";
-                                              
+                                              this.resultado = "Envío completado";
                                               this.blockHash = response.blockHash;
                                               this.blockNumber = response.blockNumber;
-                                              this.from = response.from;
                                               this.transactionHash = response.transactionHash;
                                            })
                                            .catch((error: any) => {
                                               console.log(error);
-                                              this.resultado = "Error en la transacción!";
+                                              this.resultado = "Error";
                                            });
   }
 
   subscribeToEvents() {
     // Subscribe to pending transactions
     const self = this;
-    this.web3s.contrato.events.ValueChanged({
+    this.web3s.contrato.events.Transfer({
                                               fromBlock: 0
                                             },
                                             (error: any, event: any) => {
                                               if (!error){                                                        
                                                 this.elementos.push(
                                                   { blockHash: event.blockHash,
-                                                    transactionHash: event.transactionHash,
-                                                    blockNumber:event.blockNumber,                                             
-                                                    valor: event.returnValues.newValue
+                                                    blockNumber:event.blockNumber,
+                                                    transactionHash: event.transactionHash,                                 
+                                                    to: event.returnValues.to,
+                                                    cant: event.returnValues.tokens
                                                   }
                                                 );                                                
                                               }                                              
